@@ -3,6 +3,7 @@ mod tetrimino;
 extern crate rand;
 extern crate sdl2;
 
+use crate::tetrimino::create_tetriminos::create_tetriminos::TetriminoGenerator;
 use sdl2::event::Event;
 use sdl2::image::{InitFlag, LoadTexture};
 use sdl2::keyboard::Keycode;
@@ -15,13 +16,11 @@ use sdl2::sys::image::{IMG_InitFlags_IMG_INIT_JPG, IMG_InitFlags_IMG_INIT_PNG};
 use sdl2::video::{Window, WindowContext};
 use std::fmt::format;
 use std::fs::File;
-use std::intrinsics::unreachable;
 use std::io;
 use std::io::{Read, Write};
 use std::thread::sleep;
 use std::time::{Duration, SystemTime};
 use tetrimino::create_tetriminos::create_tetriminos;
-use crate::tetrimino::create_tetriminos::create_tetriminos::TetriminoGenerator;
 
 // To make things easier to read, we'll create a constant which
 const TEXTURE_SIZE: u32 = 32;
@@ -103,7 +102,10 @@ fn load_highscores_and_lines() -> Option<(Vec<u32>, Vec<u32>)> {
 
 fn create_new_tetrimino() -> create_tetriminos::Tetrimino {
     static mut PREV: u8 = 7;
-    let rand_nb = rand::random::<u8>() % 7;
+    let mut rand_nb = rand::random::<u8>() % 7;
+    if unsafe { PREV } == rand_nb {
+        rand_nb = rand::random::<u8>() % 7;
+    }
     match rand_nb {
         0 => create_tetriminos::TetriminoI::new(),
         1 => create_tetriminos::TetriminoJ::new(),
