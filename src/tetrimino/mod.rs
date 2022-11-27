@@ -1,2 +1,2 @@
 pub mod create_tetriminos;
-mod tetris;
+pub mod tetris;

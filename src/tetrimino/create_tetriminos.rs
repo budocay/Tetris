@@ -5,7 +5,6 @@
 
 ///This module manage tetrimino creation
 pub mod create_tetriminos {
-    use sdl2::libc::tm;
 
     type Piece = Vec<Vec<u8>>;
     type States = Vec<Piece>;
@@ -20,10 +19,10 @@ pub mod create_tetriminos {
 
     /// Tetriminos structure
     pub struct Tetrimino {
-        states: States,
-        x: isize,
-        y: usize,
-        current_state: u8,
+        pub states: States,
+        pub x: isize,
+        pub y: usize,
+        pub current_state: u8,
     }
 
     /// Trait used for Tetriminos generation
@@ -33,16 +32,16 @@ pub mod create_tetriminos {
 
     impl Tetrimino {
         /// Rotate a tetriminos
-        fn rotate(&mut self, game_map: &[Vec<u8>]) {
+        pub fn rotate(&mut self, game_map: &[Vec<u8>]) {
             let mut tmp_state = self.current_state + 1;
             if tmp_state as usize >= self.states.len() {
                 tmp_state = 0;
             }
-            let x_pos = [0, -1, -1, -2, 2, -3];
+            let x_pos = [0, -1, 1, -2, 2, -3];
             for x in x_pos.iter() {
                 if self.test_position(game_map, tmp_state as usize, self.x + x, self.y) == true {
                     self.current_state = tmp_state;
-                    self.x = *x;
+                    self.x += *x;
                     break;
                 }
             }
@@ -56,14 +55,14 @@ pub mod create_tetriminos {
             x: isize,
             y: usize,
         ) -> bool {
-            for decal_y in 0..4 {
-                for decal_x in 0..4 {
-                    let x = x + decal_x;
-                    if self.states[tmp_state][decal_y][decal_x as usize] != 0
-                        && (y + decal_y >= game_map.len()
+            for shift_y in 0..4 {
+                for shift_x in 0..4 {
+                    let x = x + shift_x;
+                    if self.states[tmp_state][shift_y][shift_x as usize] != 0
+                        && (y + shift_y >= game_map.len()
                             || x < 0
-                            || x as usize >= game_map[y + decal_y].len()
-                            || game_map[y + decal_y][x as usize] != 0)
+                            || x as usize >= game_map[y + shift_y].len()
+                            || game_map[y + shift_y][x as usize] != 0)
                     {
                         return false;
                     }
@@ -72,7 +71,12 @@ pub mod create_tetriminos {
             return true;
         }
 
-        fn change_position(&mut self, game_map: &[Vec<u8>], new_x: isize, new_y: usize) -> bool {
+        pub fn change_position(
+            &mut self,
+            game_map: &[Vec<u8>],
+            new_x: isize,
+            new_y: usize,
+        ) -> bool {
             if self.test_position(game_map, self.current_state as usize, new_x, new_y) == true {
                 self.x = new_x as isize;
                 self.y = new_y;
@@ -82,7 +86,7 @@ pub mod create_tetriminos {
             }
         }
 
-        fn test_current_position(&mut self, game_map: &[Vec<u8>]) -> bool {
+        pub fn test_current_position(&mut self, game_map: &[Vec<u8>]) -> bool {
             self.test_position(game_map, self.current_state as usize, self.x, self.y)
         }
     }
@@ -172,7 +176,7 @@ pub mod create_tetriminos {
                     vec![
                         vec![3, 3, 0, 0],
                         vec![3, 0, 0, 0],
-                        vec![3, 2, 0, 0],
+                        vec![3, 0, 0, 0],
                         vec![0, 0, 0, 0],
                     ],
                 ],
@@ -234,9 +238,9 @@ pub mod create_tetriminos {
                         vec![0, 0, 0, 0],
                     ],
                     vec![
-                        vec![0, 0, 6, 6],
-                        vec![0, 6, 6, 0],
-                        vec![0, 0, 0, 0],
+                        vec![0, 6, 0, 0],
+                        vec![6, 6, 0, 0],
+                        vec![6, 0, 0, 0],
                         vec![0, 0, 0, 0],
                     ],
                 ],
