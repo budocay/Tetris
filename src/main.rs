@@ -273,13 +273,25 @@ fn display_game_information<'a>(
         .expect("Cannot render text");
 
     canvas
-        .copy(&score, None, get_rect_from_text(&score_text, 275, 75))
+        .copy(
+            &score,
+            None,
+            get_rect_from_text(&score_text, start_x_point, 75),
+        )
         .expect("Couldn't copy text");
     canvas
-        .copy(&lines_sent, None, get_rect_from_text(&score_text, 275, 125))
+        .copy(
+            &lines_sent,
+            None,
+            get_rect_from_text(&score_text, start_x_point, 125),
+        )
         .expect("Couldn't copy text");
     canvas
-        .copy(&level, None, get_rect_from_text(&score_text, 275, 160))
+        .copy(
+            &level,
+            None,
+            get_rect_from_text(&score_text, start_x_point, 160),
+        )
         .expect("Couldn't copy text");
 }
 
@@ -456,8 +468,9 @@ fn main() {
             .expect("Couldn't load the font");
         font.set_style(sdl2::ttf::FontStyle::BOLD);
 
-        let rendered_text = create_texture_from_text(&texture_creator, &font, "Tetris score", 0, 0, 0)
-            .expect("Cannot render text");
+        let rendered_text =
+            create_texture_from_text(&texture_creator, &font, "Tetris score", 0, 0, 0)
+                .expect("Cannot render text");
         canvas
             .copy(
                 &rendered_text,
@@ -470,7 +483,7 @@ fn main() {
             &mut canvas,
             &texture_creator,
             &font,
-            width as i32 - grid_x - 10,
+            width as i32 - grid_x - 150,
         );
         //
 
